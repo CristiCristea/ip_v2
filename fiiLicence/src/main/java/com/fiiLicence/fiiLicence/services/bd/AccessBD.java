@@ -53,8 +53,6 @@ public class AccessBD {
                 statementLoop.executeUpdate("UPDATE detalii_licente set id_comisie=" + idComisie + " where id=" + result.getInt(1));
                 statementLoop.close();
             }
-
-
             return 0;
 
         } catch (Exception e) {

@@ -19,10 +19,9 @@ public class Main {
         System.out.println("Verificare: " + bd.verificare("74422540752662302715"));
         System.out.println("Logare: " + bd.login("test.test", "test"));
 
-        AccessBD access = bd.login("Admin", "Root");
+        AccessBD accessSecretar = bd.login("andrei.arusoaie", "parola");
         DatabaseServiceImpl databaseService = new DatabaseServiceImpl();
-        AccessAdminBD accessAdmin = ( (AccessAdminBD) access );
-        System.out.println(databaseService.getProfsFromCommitte(2));
+        System.out.println(databaseService.profNote(1,10,10,10));
        // System.out.println(bd.inregistrare_prof("lenuta.alboaie", "parola"));
        /* System.out.println(bd.login("lenuta.alboaie","parola"));
 

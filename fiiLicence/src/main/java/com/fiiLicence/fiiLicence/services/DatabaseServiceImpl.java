@@ -399,10 +399,10 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         }
 
-        AccessBD accessSecretar = bd.login("andrei.arusoaie", "parola");
+        AccessBD access = bd.login("Admin", "Root");
+        AccessAdminBD accessAdmin = ((AccessAdminBD) access);
 
-
-        if (accessSecretar.setComisieProfesor(idProf, idCommitte) == 0)
+        if (accessAdmin.setComisieProfesor(idProf, idCommitte) == 0)
             return true;
         else
             return false;
@@ -417,7 +417,7 @@ public class DatabaseServiceImpl implements DatabaseService {
      */
     @Override
     public List<StudentResponse> getEvaluateStudentsByCommitte(int idCommitte) {
-        AccessBD access = bd.login("andrei.arusoaie", "parola");
+        AccessBD access = bd.login("Admin", "Root");
         AccessAdminBD accessAdmin = ((AccessAdminBD) access);
         List<IntrareStudenti> listaStudenti = accessAdmin.getStudentsByCommitte(idCommitte);
         List<StudentResponse> listaResposeStudenti = new ArrayList<StudentResponse>();
@@ -442,9 +442,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public boolean profNote(int idProf, int idStudent, int gradeOral, int gradeProiect) {
 
-        AccessProfesorBD accessProfesor = (AccessProfesorBD) bd.login("lenuta.alboaie", "parola");
-        IntrareComisii comisieProfesor = accessProfesor.getCommitteByProf(idProf);
-        IntrareComisii comisieStudent = accessProfesor.getCommitteByStudent(idStudent);
+        AccessBD access = bd.login("Admin", "Root");
+        AccessAdminBD accessAdmin = ((AccessAdminBD) access);
+        IntrareComisii comisieProfesor = accessAdmin.getCommitteByProf(idProf);
+        IntrareComisii comisieStudent = accessAdmin.getCommitteByStudent(idStudent);
 
         if (comisieProfesor == null || comisieStudent == null || comisieProfesor.getId() != comisieStudent.getId()) {
 
@@ -452,9 +453,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
 
 
-        int profIndex = accessProfesor.getProfIndex(idProf, comisieProfesor.getId());
+        int profIndex = accessAdmin.getProfIndex(idProf, comisieProfesor.getId());
         System.out.println(profIndex);
-        return (accessProfesor.updateNotaStudent(profIndex, idStudent, 1, gradeOral, gradeProiect));
+        return (accessAdmin.updateNotaStudent(profIndex, idStudent, 1, gradeOral, gradeProiect));
 
     }
 
