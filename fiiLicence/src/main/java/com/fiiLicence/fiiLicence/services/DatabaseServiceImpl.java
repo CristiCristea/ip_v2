@@ -27,7 +27,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     public boolean verifyToken(String token) {
         BD database = new BD();
-        IntrareConturi cont = new IntrareConturi();
+        IntrareConturi cont;
         bd.login("Admin", "Root");
         cont = database.getContByToken(token);
         if (cont != null)
@@ -120,7 +120,6 @@ public class DatabaseServiceImpl implements DatabaseService {
     public String login(String email, String password) {
         String token = "";
         String username = email.substring(0, email.indexOf('@'));
-        IntrareConturi idCont = new IntrareConturi();
         AccessBD result = bd.login(username, password);
         if (result != null) {
             token = bd.getHas(email, password);
@@ -139,7 +138,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public UserinfoResponse getUserInfo(String token) {
         UserinfoResponse output = new UserinfoResponse();
-        IntrareConturi cont = new IntrareConturi();
+        IntrareConturi cont;
         boolean verifyToken = verifyToken(token);
         if (verifyToken == true) {
             cont = bd.getContByToken(token);
@@ -306,13 +305,6 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public List<CommitteListResponse> getCommitteList(String token) {
         List<CommitteListResponse> committeeList = new ArrayList<CommitteListResponse>();
-
-        // aici trebuie verificat ce fel de utilizator este cu ajutorul
-        // token-ului ..
-
-        // daca utilizator are drept de acces la o astfel de actiune ( Secretar
-        // sau Admin)
-
         AccessBD access = bd.login("Admin", "Root");
 
         AccessAdminBD accessAdmin = (AccessAdminBD) access;// presupunem ca este
@@ -569,7 +561,11 @@ public class DatabaseServiceImpl implements DatabaseService {
         AccessAdminBD accessAdmin = ((AccessAdminBD) access);
         return accessAdmin.getLicenseData(idStudent);
     }
-
+    /* functia 25 : functie ce returneaza true daca exista o sesiune activa
+    *                false altfel
+    * input - none
+    * output - ce se cere :D
+    */
     @Override
     public boolean isSesionActive() {
         AccessBD access = bd.login("Admin", "Root");

@@ -2,7 +2,8 @@ package com.fiiLicence.fiiLicence.controllers;
 
 import com.fiiLicence.fiiLicence.models.requests.*;
 import com.fiiLicence.fiiLicence.models.response.*;
-import com.fiiLicence.fiiLicence.services.DatabaseService;
+
+import com.fiiLicence.fiiLicence.services.DatabaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import java.util.List;
 @RestController
 public class HTTPController {
     @Autowired
-    private DatabaseService databaseService;
+    private DatabaseServiceImpl databaseService;
 
     //1 ---------------------------------------- /REGISTRATION -------------------------------------------------
     @CrossOrigin
@@ -93,8 +94,9 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/recordlicence", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> recordLicence(@RequestHeader("Authorization") String token, @RequestBody LicenceRequest request) {
-
-        boolean result = databaseService.recordLicence(token,request.getNameOfLicence(), request.getIdProfesor(), request.getDescriptionOfLicence());
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.recordLicence(token, request.getNameOfLicence(), request.getIdProfesor(), request.getDescriptionOfLicence());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
@@ -107,7 +109,8 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/getStudentGrade", method = RequestMethod.POST)
     public ResponseEntity<GradeResponse> getStudentGrade(@RequestHeader("Authorization") String token, @RequestBody IdResponse request) {
-
+        if (!databaseService.verifyToken(token))
+            return null;
         GradeResponse result = databaseService.getStudentGrade(request.getId());
 
         System.out.println("------ /getStudentGrade - " + request.getId() + " - " + result + " ------");
@@ -117,9 +120,10 @@ public class HTTPController {
     //8 ---------------------------------------- /ClientListPage -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/clientListPage", method = RequestMethod.POST)
-    public ResponseEntity<List<StundetListPageResponse>> clientListPage(@RequestHeader("Authorization") String token,@RequestBody ClientListPageRequest request) {
-
-        List<StundetListPageResponse> response = databaseService.getClientListPage(request.getPagenumber(),request.getPagesize());
+    public ResponseEntity<List<StundetListPageResponse>> clientListPage(@RequestHeader("Authorization") String token, @RequestBody ClientListPageRequest request) {
+        if (!databaseService.verifyToken(token))
+            return null;
+        List<StundetListPageResponse> response = databaseService.getClientListPage(request.getPagenumber(), request.getPagesize());
 
         if (response == null) {
             System.out.println("------ /clientListPage - " + token + " - NO MATCH ------");
@@ -127,14 +131,15 @@ public class HTTPController {
         }
 
         System.out.println("------ /clientListPage - " + token + " ------");
-        return new ResponseEntity<List<StundetListPageResponse>>(databaseService.getClientListPage(request.getPagenumber(),request.getPagesize()), HttpStatus.OK);
+        return new ResponseEntity<List<StundetListPageResponse>>(databaseService.getClientListPage(request.getPagenumber(), request.getPagesize()), HttpStatus.OK);
     }
 
     //9 ---------------------------------------- /GETCOMMITTELIST -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/getCommitteList", method = RequestMethod.GET)
     public ResponseEntity<List<CommitteListResponse>> getCommitteList(@RequestHeader("Authorization") String token) {
-
+        if (!databaseService.verifyToken(token))
+            return null;
         List<CommitteListResponse> response = databaseService.getCommitteList(token);
 
         if (response == null) {
@@ -149,8 +154,9 @@ public class HTTPController {
     //10 ---------------------------------------- /GETPROFSFROMCOMMITTE -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/getProfsFromCommitte", method = RequestMethod.POST)
-    public ResponseEntity<List<IdResponse>> getProfsFromCommitte(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
-
+    public ResponseEntity<List<IdResponse>> getProfsFromCommitte(@RequestHeader("Authorization") String token, @RequestBody IdResponse request) {
+        if (!databaseService.verifyToken(token))
+            return null;
         List<IdResponse> response = databaseService.getProfsFromCommitte(request.getId());
 
         if (response == null) {
@@ -167,7 +173,8 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/getProfsWithoutCommitte", method = RequestMethod.GET)
     public ResponseEntity<List<IdResponse>> getProfsWithoutCommitte(@RequestHeader("Authorization") String token) {
-
+        if (!databaseService.verifyToken(token))
+            return null;
         List<IdResponse> response = databaseService.getProfsWithoutCommitte(token);
 
         if (response == null) {
@@ -183,21 +190,23 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/moveProfToCommitte", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> moveProfToCommitte(@RequestHeader("Authorization") String token, @RequestBody MoveProfRequest request) {
-
-        boolean result = databaseService.moveProfToCommitte(request.getIdProf(),request.getIdCommitte(),token);
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.moveProfToCommitte(request.getIdProf(), request.getIdCommitte(), token);
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /moveProfToCommitte - " + request.getIdProf() +" " + request.getIdCommitte() + " - " + result + " ------");
+        System.out.println("------ /moveProfToCommitte - " + request.getIdProf() + " " + request.getIdCommitte() + " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 
     //13 ---------------------------------------- /GETEVALUATESTUDENTBYCOMMITE -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/getEvaluateStudentsByCommitte", method = RequestMethod.POST)
-    public ResponseEntity<List<StudentResponse>> getEvaluateStudentsByCommitte(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
-
+    public ResponseEntity<List<StudentResponse>> getEvaluateStudentsByCommitte(@RequestHeader("Authorization") String token, @RequestBody IdResponse request) {
+        if (!databaseService.verifyToken(token))
+            return null;
         List<StudentResponse> response = databaseService.getEvaluateStudentsByCommitte(request.getId());
 
         if (response == null) {
@@ -213,21 +222,23 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/profNote", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> profNote(@RequestHeader("Authorization") String token, @RequestBody ProfNoteRequest request) {
-
-        boolean result = databaseService.profNote(request.getIdProf(),request.getIdStudent(),request.getGradeOral(),request.getGradeProiect());
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.profNote(request.getIdProf(), request.getIdStudent(), request.getGradeOral(), request.getGradeProiect());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /profNote - " + request.getIdProf() +" " + request.getIdStudent()+" "+request.getGradeOral()+" "+request.getGradeProiect() + " - " + result + " ------");
+        System.out.println("------ /profNote - " + request.getIdProf() + " " + request.getIdStudent() + " " + request.getGradeOral() + " " + request.getGradeProiect() + " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 
     //15 ---------------------------------------- /GETSTUDENTGUIDEDBYPROF -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/getStudentGuided", method = RequestMethod.POST)
-    public ResponseEntity<List<StudentGuidedListResponse>> getStudentGuided(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
-
+    public ResponseEntity<List<StudentGuidedListResponse>> getStudentGuided(@RequestHeader("Authorization") String token, @RequestBody IdResponse request) {
+        if (!databaseService.verifyToken(token))
+            return null;
         List<StudentGuidedListResponse> response = databaseService.getStudentGuided(request.getId());
 
         if (response == null) {
@@ -243,13 +254,14 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/insertStudentToListProf", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> insertStudentToListProf(@RequestHeader("Authorization") String token, @RequestBody InsertStudentRequest request) {
-
-        boolean result = databaseService.insertStudentToListProf(request.getIdProf(),request.getEmail());
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.insertStudentToListProf(request.getIdProf(), request.getEmail());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /insertStudentToListProf - " + request.getIdProf() +" " + request.getEmail()+ " - " + result + " ------");
+        System.out.println("------ /insertStudentToListProf - " + request.getIdProf() + " " + request.getEmail() + " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 
@@ -257,13 +269,14 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/deleteStudentToListProf", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> deleteStudentToListProf(@RequestHeader("Authorization") String token, @RequestBody DeleteStudentRequest request) {
-
-        boolean result = databaseService.deleteStudentToListProf(request.getIdProf(),request.getIdStudent());
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.deleteStudentToListProf(request.getIdProf(), request.getIdStudent());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /deleteStudentToListProf - " + request.getIdProf() +" " + request.getIdStudent() + " - " + result + " ------");
+        System.out.println("------ /deleteStudentToListProf - " + request.getIdProf() + " " + request.getIdStudent() + " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 
@@ -271,21 +284,23 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/modifyDate", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> modifyDate(@RequestHeader("Authorization") String token, @RequestBody ModifyDateRequest request) {
-
-        boolean result = databaseService.modifyDate(request.getIdCommitte(),request.getBeginDate(),request.getEndDate());
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.modifyDate(request.getIdCommitte(), request.getBeginDate(), request.getEndDate());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /modifyDate - " + request.getIdCommitte() +" " + request.getBeginDate() +" "+request.getEndDate() + " - " + result + " ------");
+        System.out.println("------ /modifyDate - " + request.getIdCommitte() + " " + request.getBeginDate() + " " + request.getEndDate() + " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 
     //19 ---------------------------------------- /GETALLSTUDENTS -------------------------------------------------
     @CrossOrigin
-    @RequestMapping(value = "/getAllStudents", method= RequestMethod.GET)
+    @RequestMapping(value = "/getAllStudents", method = RequestMethod.GET)
     public ResponseEntity<List<StundetListPageResponse>> getAllStudents(@RequestHeader("Authorization") String token) {
-
+        if (!databaseService.verifyToken(token))
+            return null;
         List<StundetListPageResponse> response = databaseService.getFinalMarksOfStudents();
 
         if (response == null) {
@@ -299,9 +314,10 @@ public class HTTPController {
 
     //20 ---------------------------------------- /GETALLHALLS -------------------------------------------------
     @CrossOrigin
-    @RequestMapping(value = "/getALLHalls", method= RequestMethod.GET)
+    @RequestMapping(value = "/getALLHalls", method = RequestMethod.GET)
     public ResponseEntity<List<DistributionOnHallsResponse>> getAllHalls(@RequestHeader("Authorization") String token) {
-
+        if (!databaseService.verifyToken(token))
+            return null;
         List<DistributionOnHallsResponse> response = databaseService.getDistributionOfStudentsOnHalls();
 
         if (response == null) {
@@ -316,9 +332,10 @@ public class HTTPController {
     //21 ---------------------------------------- /CREATESESION -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/createSesion", method = RequestMethod.POST)
-    public ResponseEntity<RegistrationResponse> createSesion(@RequestHeader("Authorization") String token,@RequestBody SesionRequest request) {
-
-        boolean result = databaseService.addSession(request.getBeginDate(), request.getEndDate(),request.getNumberOfCommitte());
+    public ResponseEntity<RegistrationResponse> createSesion(@RequestHeader("Authorization") String token, @RequestBody SesionRequest request) {
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.addSession(request.getBeginDate(), request.getEndDate(), request.getNumberOfCommitte());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
@@ -330,8 +347,9 @@ public class HTTPController {
     //22 ---------------------------------------- /HASLICENSE -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/hasLicense", method = RequestMethod.POST)
-    public ResponseEntity<RegistrationResponse> hasLicense(@RequestHeader("Authorization") String token,@RequestBody IdRequest request) {
-
+    public ResponseEntity<RegistrationResponse> hasLicense(@RequestHeader("Authorization") String token, @RequestBody IdRequest request) {
+        if (!databaseService.verifyToken(token))
+            return null;
         boolean result = databaseService.hasUploadedLicense(request.getID());
 
         RegistrationResponse response = new RegistrationResponse();
@@ -344,9 +362,10 @@ public class HTTPController {
     //23 ---------------------------------------- /UPDATELICENSE-------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/updateLicense", method = RequestMethod.POST)
-    public ResponseEntity<RegistrationResponse> updateLicense(@RequestHeader("Authorization") String token,@RequestBody UpdateLicenceRequest request) {
-
-        boolean result = databaseService.insertUploadedLicense(request.getIdStudent(),request.getData());
+    public ResponseEntity<RegistrationResponse> updateLicense(@RequestHeader("Authorization") String token, @RequestBody UpdateLicenceRequest request) {
+        if (!databaseService.verifyToken(token))
+            return null;
+        boolean result = databaseService.insertUploadedLicense(request.getIdStudent(), request.getData());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
@@ -358,11 +377,12 @@ public class HTTPController {
     //24 ---------------------------------------- /GETLICENSE -------------------------------------------------
     @CrossOrigin
     @RequestMapping(value = "/getLicense", method = RequestMethod.POST)
-    public ResponseEntity<LicenseDataResponse> getLicense(@RequestHeader("Authorization") String token,@RequestBody IdRequest request) {
-
+    public ResponseEntity<LicenseDataResponse> getLicense(@RequestHeader("Authorization") String token, @RequestBody IdRequest request) {
+        if (!databaseService.verifyToken(token))
+            return null;
         LicenseDataResponse result = databaseService.getLicenseInformations(request.getID());
 
-        System.out.println("------ /getLicense - " + request.getID()+ " ------");
+        System.out.println("------ /getLicense - " + request.getID() + " ------");
         return new ResponseEntity<LicenseDataResponse>(result, HttpStatus.OK);
     }
 
@@ -370,13 +390,14 @@ public class HTTPController {
     @CrossOrigin
     @RequestMapping(value = "/activeSesion", method = RequestMethod.GET)
     public ResponseEntity<RegistrationResponse> activeSesion(@RequestHeader("Authorization") String token) {
-
+        if (!databaseService.verifyToken(token))
+            return null;
         boolean result = databaseService.isSesionActive();
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /updateLicense - "  + " - " + Boolean.toString(result) + " ------");
+        System.out.println("------ /activeSesion - " + " - " + Boolean.toString(result) + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 }
