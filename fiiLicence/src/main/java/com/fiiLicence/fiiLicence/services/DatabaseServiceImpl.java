@@ -356,7 +356,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             idProfiComisie.add(comisie.getIdProf4());
 
         List<IdResponse> result = new ArrayList<IdResponse>();
-        for (int index = 0,size= idProfiComisie.size();index < size;index++) {
+        for (int index = 0, size = idProfiComisie.size(); index < size; index++) {
             IdResponse idRes = new IdResponse();
             idRes.setId(idProfiComisie.get(index));
             result.add(idRes);
@@ -541,7 +541,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public boolean hasUploadedLicense(int idStudent) {
         AccessBD access = bd.login("Admin", "Root");
-        AccessAdminBD accessAdmin = ( (AccessAdminBD) access );
+        AccessAdminBD accessAdmin = ((AccessAdminBD) access);
         if (accessAdmin.getFisierLucrare(idStudent) != null)
             return true;
         return false;
@@ -569,6 +569,19 @@ public class DatabaseServiceImpl implements DatabaseService {
         AccessAdminBD accessAdmin = ((AccessAdminBD) access);
         return accessAdmin.getLicenseData(idStudent);
     }
+
+    @Override
+    public boolean isSesionActive() {
+        AccessBD access = bd.login("Admin", "Root");
+        AccessAdminBD accessAdmin = ((AccessAdminBD) access);
+        List<IntrareSesiuni> sesiunis = accessAdmin.selectSesiuni();
+        for (IntrareSesiuni sesiune : sesiunis) {
+            if (sesiune.getActive() == 1)
+                return true;
+        }
+        return  false;
+    }
+
 
     @Override
     public void finalize() {

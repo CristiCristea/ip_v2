@@ -78,4 +78,8 @@ public interface DatabaseService {
 
     //24
     LicenseDataResponse getLicenseInformations(int idStudent);
+
+    //25
+    boolean isSesionActive();
+
 }

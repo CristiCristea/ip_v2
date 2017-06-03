@@ -365,4 +365,18 @@ public class HTTPController {
         System.out.println("------ /getLicense - " + request.getID()+ " ------");
         return new ResponseEntity<LicenseDataResponse>(result, HttpStatus.OK);
     }
+
+    //25 ---------------------------------------- /ISSESIONACTIVE -------------------------------------------------
+    @CrossOrigin
+    @RequestMapping(value = "/activeSesion", method = RequestMethod.GET)
+    public ResponseEntity<RegistrationResponse> activeSesion(@RequestHeader("Authorization") String token) {
+
+        boolean result = databaseService.isSesionActive();
+
+        RegistrationResponse response = new RegistrationResponse();
+        response.setResponse(result);
+
+        System.out.println("------ /updateLicense - "  + " - " + Boolean.toString(result) + " ------");
+        return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
+    }
 }
