@@ -552,7 +552,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     */
     @Override
     public boolean insertUploadedLicense(int idStudent, byte[] data) {
-        AccessBD accessBD = new AccessBD();
+        AccessBD accessBD = bd.login("Admin", "Root");
         if (accessBD.setFisierLucrare(idStudent, data) != 0)
             return false;
 
