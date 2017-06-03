@@ -22,8 +22,7 @@ public class Main {
         AccessBD access = bd.login("Admin", "Root");
         DatabaseServiceImpl databaseService = new DatabaseServiceImpl();
         AccessAdminBD accessAdmin = ( (AccessAdminBD) access );
-        System.out.println(databaseService.hasUploadedLicense(1));
-
+        System.out.println(databaseService.getProfsFromCommitte(2));
        // System.out.println(bd.inregistrare_prof("lenuta.alboaie", "parola"));
        /* System.out.println(bd.login("lenuta.alboaie","parola"));
 

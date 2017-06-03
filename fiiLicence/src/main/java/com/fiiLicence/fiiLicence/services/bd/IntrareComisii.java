@@ -86,4 +86,8 @@ public class IntrareComisii {
         this.sala = sala;
     }
 
+    @Override
+    public String toString() {
+        return id +idProfSef+idProf2+idProf3+idProf4+idSecretar+"";
+    }
 }

@@ -356,9 +356,9 @@ public class DatabaseServiceImpl implements DatabaseService {
             idProfiComisie.add(comisie.getIdProf4());
 
         List<IdResponse> result = new ArrayList<IdResponse>();
-        for (Integer i : idProfiComisie) {
+        for (int index = 0,size= idProfiComisie.size();index < size;index++) {
             IdResponse idRes = new IdResponse();
-            idRes.setId(idProfiComisie.get(i - 1));
+            idRes.setId(idProfiComisie.get(index));
             result.add(idRes);
         }
         return result;

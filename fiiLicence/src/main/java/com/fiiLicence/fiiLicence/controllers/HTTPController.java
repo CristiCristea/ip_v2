@@ -16,7 +16,7 @@ public class HTTPController {
     private DatabaseService databaseService;
 
     //1 ---------------------------------------- /REGISTRATION -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> registration(@RequestBody RegistrationRequest request) {
 
@@ -30,7 +30,7 @@ public class HTTPController {
     }
 
     //2 ---------------------------------------- /CONFIRM REGISTRATION ---------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/confirmregistration", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> confirmRegistration(@RequestBody ConfirmRegistrationRequest request) {
 
@@ -44,7 +44,7 @@ public class HTTPController {
     }
 
     //3 ---------------------------------------- /LOGIN -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
 
@@ -58,7 +58,7 @@ public class HTTPController {
     }
 
     //4 ---------------------------------------- /USERINFO -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/userinfo", method = RequestMethod.GET)
     public ResponseEntity<UserinfoResponse> getUserInfo(@RequestHeader("Authorization") String token) {
 
@@ -74,7 +74,7 @@ public class HTTPController {
     }
 
     //5 ---------------------------------------- /PROFESORLIST -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/profesorlist", method = RequestMethod.GET)
     public ResponseEntity<List<ProfListResponse>> profesorlist(@RequestHeader("Authorization") String token) {
 
@@ -90,7 +90,7 @@ public class HTTPController {
     }
 
     //6 ---------------------------------------- /RECORDLICENCE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/recordlicence", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> recordLicence(@RequestHeader("Authorization") String token, @RequestBody LicenceRequest request) {
 
@@ -104,7 +104,7 @@ public class HTTPController {
     }
 
     //7 ---------------------------------------- /GETSTUDENTGRADE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getStudentGrade", method = RequestMethod.POST)
     public ResponseEntity<GradeResponse> getStudentGrade(@RequestHeader("Authorization") String token, @RequestBody IdResponse request) {
 
@@ -115,7 +115,7 @@ public class HTTPController {
     }
 
     //8 ---------------------------------------- /ClientListPage -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/clientListPage", method = RequestMethod.POST)
     public ResponseEntity<List<StundetListPageResponse>> clientListPage(@RequestHeader("Authorization") String token,@RequestBody ClientListPageRequest request) {
 
@@ -131,7 +131,7 @@ public class HTTPController {
     }
 
     //9 ---------------------------------------- /GETCOMMITTELIST -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getCommitteList", method = RequestMethod.GET)
     public ResponseEntity<List<CommitteListResponse>> getCommitteList(@RequestHeader("Authorization") String token) {
 
@@ -147,7 +147,7 @@ public class HTTPController {
     }
 
     //10 ---------------------------------------- /GETPROFSFROMCOMMITTE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getProfsFromCommitte", method = RequestMethod.POST)
     public ResponseEntity<List<IdResponse>> getProfsFromCommitte(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
 
@@ -164,7 +164,7 @@ public class HTTPController {
 
 
     //11 ---------------------------------------- /GETPROFSWITHOUTCOMMITTE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getProfsWithoutCommitte", method = RequestMethod.GET)
     public ResponseEntity<List<IdResponse>> getProfsWithoutCommitte(@RequestHeader("Authorization") String token) {
 
@@ -180,7 +180,7 @@ public class HTTPController {
     }
 
     //12 ---------------------------------------- /MOVEPROFTOCOMMITTE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/moveProfToCommitte", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> moveProfToCommitte(@RequestHeader("Authorization") String token, @RequestBody MoveProfRequest request) {
 
@@ -194,7 +194,7 @@ public class HTTPController {
     }
 
     //13 ---------------------------------------- /GETEVALUATESTUDENTBYCOMMITE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getEvaluateStudentsByCommitte", method = RequestMethod.POST)
     public ResponseEntity<List<StudentResponse>> getEvaluateStudentsByCommitte(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
 
@@ -210,7 +210,7 @@ public class HTTPController {
     }
 
     //14 ---------------------------------------- /PROFNOTE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/profNote", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> profNote(@RequestHeader("Authorization") String token, @RequestBody ProfNoteRequest request) {
 
@@ -224,7 +224,7 @@ public class HTTPController {
     }
 
     //15 ---------------------------------------- /GETSTUDENTGUIDEDBYPROF -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getStudentGuided", method = RequestMethod.POST)
     public ResponseEntity<List<StudentGuidedListResponse>> getStudentGuided(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
 
@@ -240,7 +240,7 @@ public class HTTPController {
     }
 
     //16 ---------------------------------------- /INSERTSTUDENTTOLISTPROF -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/insertStudentToListProf", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> insertStudentToListProf(@RequestHeader("Authorization") String token, @RequestBody InsertStudentRequest request) {
 
@@ -254,7 +254,7 @@ public class HTTPController {
     }
 
     //17 ---------------------------------------- /DELETESTUDENTTOLISTPROF -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/deleteStudentToListProf", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> deleteStudentToListProf(@RequestHeader("Authorization") String token, @RequestBody DeleteStudentRequest request) {
 
@@ -268,7 +268,7 @@ public class HTTPController {
     }
 
     //18 ---------------------------------------- /MODIFYDATE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/modifyDate", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> modifyDate(@RequestHeader("Authorization") String token, @RequestBody ModifyDateRequest request) {
 
@@ -282,7 +282,7 @@ public class HTTPController {
     }
 
     //19 ---------------------------------------- /GETALLSTUDENTS -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getAllStudents", method= RequestMethod.GET)
     public ResponseEntity<List<StundetListPageResponse>> getAllStudents(@RequestHeader("Authorization") String token) {
 
@@ -298,7 +298,7 @@ public class HTTPController {
     }
 
     //20 ---------------------------------------- /GETALLHALLS -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getALLHalls", method= RequestMethod.GET)
     public ResponseEntity<List<DistributionOnHallsResponse>> getAllHalls(@RequestHeader("Authorization") String token) {
 
@@ -314,7 +314,7 @@ public class HTTPController {
     }
 
     //21 ---------------------------------------- /CREATESESION -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/createSesion", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> createSesion(@RequestHeader("Authorization") String token,@RequestBody SesionRequest request) {
 
@@ -328,7 +328,7 @@ public class HTTPController {
     }
 
     //22 ---------------------------------------- /HASLICENSE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/hasLicense", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> hasLicense(@RequestHeader("Authorization") String token,@RequestBody IdRequest request) {
 
@@ -342,7 +342,7 @@ public class HTTPController {
     }
 
     //23 ---------------------------------------- /UPDATELICENSE-------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/updateLicense", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> updateLicense(@RequestHeader("Authorization") String token,@RequestBody UpdateLicenceRequest request) {
 
@@ -356,7 +356,7 @@ public class HTTPController {
     }
 
     //24 ---------------------------------------- /GETLICENSE -------------------------------------------------
-    //@CrossOrigin
+    @CrossOrigin
     @RequestMapping(value = "/getLicense", method = RequestMethod.POST)
     public ResponseEntity<LicenseDataResponse> getLicense(@RequestHeader("Authorization") String token,@RequestBody IdRequest request) {
 
