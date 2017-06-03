@@ -4,7 +4,6 @@ import com.fiiLicence.fiiLicence.models.response.*;
 import com.fiiLicence.fiiLicence.services.bd.*;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,6 +147,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             output.setPrenume(cont.getUsername().substring(cont.getUsername().indexOf('.') + 1, cont.getUsername().length()));
             output.setEmail(cont.getEmail());
             output.setTip(cont.getTipUtilizator());
+            output.setIdUser(cont.getId());
             return output;
         } else
             return null;
@@ -539,9 +539,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         */
     @Override
     public boolean hasUploadedLicense(int idStudent) {
-        AccessBD access = bd.login("andrei.arusoaie", "parola");
-        AccessSecretarBD accessSecretar = (AccessSecretarBD) access;
-        if (accessSecretar.getFisierLucrare(idStudent) != null)
+        AccessBD access = bd.login("Admin", "Root");
+        AccessAdminBD accessAdmin = ( (AccessAdminBD) access );
+        if (accessAdmin.getFisierLucrare(idStudent) != null)
             return true;
         return false;
     }

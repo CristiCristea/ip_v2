@@ -189,14 +189,15 @@ public class AccessAdminBD extends AccessBD {
         PreparedStatement statement = null;
         ResultSet result = null;
         try {
-            byte[] data;
+            byte[] data = null;
             Blob blob;
             statement = conexiune.prepareStatement("SELECT FISIER FROM LICENTE WHERE ID_STUDENT = ?");
             statement.setInt(1, idStudent);
             result = statement.executeQuery();
             result.next();
             blob = result.getBlob(1);
-            data = blob.getBytes(1, (int) blob.length());
+            if(blob != null)
+                data = blob.getBytes(1, (int) blob.length());
             return data;
         } catch (Exception e) {
             System.out.println("Exceptie citire fisier lucrare:" + e.getMessage());

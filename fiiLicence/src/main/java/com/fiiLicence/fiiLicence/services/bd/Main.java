@@ -19,23 +19,15 @@ public class Main {
         System.out.println("Verificare: " + bd.verificare("74422540752662302715"));
         System.out.println("Logare: " + bd.login("test.test", "test"));
 
-
+        AccessBD access = bd.login("Admin", "Root");
         DatabaseServiceImpl databaseService = new DatabaseServiceImpl();
-        String ceva = "A";
-        byte[] b = ceva.getBytes();
+        AccessAdminBD accessAdmin = ( (AccessAdminBD) access );
+        System.out.println(databaseService.hasUploadedLicense(1));
 
-        System.out.println(databaseService.recordLicence("30ed807e4c78b937222ca5938ec65278","Licenta in microservicii",1,"LICENTA"));
+       // System.out.println(bd.inregistrare_prof("lenuta.alboaie", "parola"));
+       /* System.out.println(bd.login("lenuta.alboaie","parola"));
 
-
-
-
-
-
-
-        //System.out.println(bd.inregistrare_prof("lenuta.alboaie", "parola"));
-        //System.out.println(bd.login("lenuta.alboaie","parola"));
-
-		/*if(bd.isConnected())
+		if(bd.isConnected())
         {
 			AccessBD access = bd.login("Admin", "Root");
 			System.out.println(access.getTip());
@@ -47,7 +39,9 @@ public class Main {
 				byte[] b = ceva.getBytes();
 				System.out.println("Set Fisier:"+accessAdmin.setFisierLucrare(1, b));
 				System.out.println("Get Fisier:"+accessAdmin.getFisierLucrare(1)[0]);
-				System.out.println("Update Sesiune Active:"+accessAdmin.updateSesiuneActive(99));
+                access = bd.login("andrei.arusoaie", "parola");
+                AccessSecretarBD accessSecretar = (AccessSecretarBD) access;
+                /*System.out.println("Update Sesiune Active:"+accessAdmin.updateSesiuneActive(99));
 				System.out.println("Get Sesiune Active:"+accessAdmin.selectSesiuni().get(0).getActive());
 				System.out.println("Coordonatori fara comisie:"+accessAdmin.profesoriCoordonatoriFaraComisie());
 				System.out.println("Set Comisie prof:"+accessAdmin.setComisieProfesor(1, 5));
@@ -59,6 +53,5 @@ public class Main {
 				System.out.println("Set Sala   Comisie:"+ accessAdmin.setSalaComisie(1,"Sala"));
 			}
 		}*/
-
     }
 }
