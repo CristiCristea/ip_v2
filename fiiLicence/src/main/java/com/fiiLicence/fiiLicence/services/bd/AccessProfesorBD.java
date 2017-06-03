@@ -301,13 +301,16 @@ public class AccessProfesorBD extends AccessBD {
             return -7;
         }
     }
+
     public IntrareComisii getCommitteByProf(int idProf) {
         IntrareComisii intrare = new IntrareComisii();
+        PreparedStatement pStatement = null;
+        ResultSet result = null;
         try {
 
-            PreparedStatement pStatement = conexiune.prepareStatement("select * from comisii c join profesori p on c.id = p.id_comisie where p.id = ?");
+            pStatement = conexiune.prepareStatement("select * from comisii c join profesori p on c.id = p.id_comisie where p.id = ?");
             pStatement.setInt(1, idProf);
-            ResultSet result = pStatement.executeQuery();
+            result = pStatement.executeQuery();
             if (result.next()) {
 
                 intrare.setId(result.getInt(1));
@@ -325,14 +328,26 @@ public class AccessProfesorBD extends AccessBD {
         } catch (SQLException e) {
             System.out.println("Exceptie la selectComisii: " + e.getMessage());
             return null;
+        } finally {
+            try {
+                if (pStatement != null)
+                    pStatement.close();
+                if (result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
+
     public IntrareComisii getCommitteByStudent(int idStudent) {
         IntrareComisii intrare = new IntrareComisii();
+        PreparedStatement pStatement = null;
+        ResultSet result = null;
         try {
-            PreparedStatement pStatement = conexiune.prepareStatement("select * from comisii c join studenti s on c.id = s.id_comisie where s.id = ?");
+             pStatement = conexiune.prepareStatement("select * from comisii c join studenti s on c.id = s.id_comisie where s.id = ?");
             pStatement.setInt(1, idStudent);
-            ResultSet result = pStatement.executeQuery();
+             result = pStatement.executeQuery();
             if (result.next() && result != null) {
 
                 intrare.setId(result.getInt(1));
@@ -350,16 +365,28 @@ public class AccessProfesorBD extends AccessBD {
         } catch (Exception e) {
             System.out.println("Exceptie la selectComisii: " + e.getMessage());
             return null;
+        }finally {
+            try {
+                if (pStatement != null)
+                    pStatement.close();
+                if( result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
 
     }
+
     public int getProfIndex(int idProf, int idCommitte) {
 
         IntrareComisii rezultat = new IntrareComisii();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
-            PreparedStatement statement = conexiune.prepareStatement("Select * from comisii where id = ?");
+           statement = conexiune.prepareStatement("Select * from comisii where id = ?");
             statement.setInt(1, idCommitte);
-            ResultSet result = statement.executeQuery();
+             result = statement.executeQuery();
 
             while (result.next()) {
 
@@ -377,6 +404,15 @@ public class AccessProfesorBD extends AccessBD {
         } catch (Exception e) {
             System.out.println("Exceptie la selectStudenti:" + e.getMessage());
             return 0;
+        }finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if( result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
 
         if (rezultat.getIdProfSef() == idProf) {
@@ -402,10 +438,13 @@ public class AccessProfesorBD extends AccessBD {
             return false;
         }
 
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        PreparedStatement statement2 = null;
         try {
-            PreparedStatement statement = conexiune.prepareStatement("Select id from licente where id_student = ?");
+             statement = conexiune.prepareStatement("Select id from licente where id_student = ?");
             statement.setInt(1, idStudent);
-            ResultSet result = statement.executeQuery();
+            result = statement.executeQuery();
             result.next();
 
 
@@ -413,14 +452,14 @@ public class AccessProfesorBD extends AccessBD {
 
 
             if (indexProf != 5) {
-                PreparedStatement statement2 = conexiune.prepareStatement(" update DETALII_LICENTE  set nota_" + indexProf + "_oral = ?,nota_" + indexProf + "_proiect = ? where id = ? ");
+                 statement2 = conexiune.prepareStatement(" update DETALII_LICENTE  set nota_" + indexProf + "_oral = ?,nota_" + indexProf + "_proiect = ? where id = ? ");
                 statement2.setInt(1, notaOral);
                 statement2.setInt(2, notaProiect);
                 statement2.setInt(3, idLicenta);
                 statement2.executeUpdate();
                 return true;
             } else {
-                PreparedStatement statement2 = conexiune.prepareStatement(" update DETALII_LICENTE  set nota_" + indexProf + "_oral_coordonator = ?,nota_" + indexProf + "_proiect_coordonator = ? where id = ? ");
+                 statement2 = conexiune.prepareStatement(" update DETALII_LICENTE  set nota_" + indexProf + "_oral_coordonator = ?,nota_" + indexProf + "_proiect_coordonator = ? where id = ? ");
                 statement2.setInt(1, notaOral);
                 statement2.setInt(2, notaProiect);
                 statement2.setInt(3, idLicenta);
@@ -431,9 +470,19 @@ public class AccessProfesorBD extends AccessBD {
         } catch (Exception e) {
             System.out.println("Exceptie la update nota:" + e.getMessage());
             return false;
+        }finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (statement2 != null)
+                    statement2.close();
+                if( result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
-
 
 
 }

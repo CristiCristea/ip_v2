@@ -205,9 +205,6 @@ public class DatabaseServiceImpl implements DatabaseService {
         idCont = cont.getId();
         student = bd.selectStudentByIdCont(idCont);
 
-        // if (!cont.getTipUtilizator().equals("Student"))
-        //   return false;
-
         for (IntrareLicente licence : licente) {
             if (licence.getIdStudent() == student.getId())
                 return false;
@@ -216,14 +213,17 @@ public class DatabaseServiceImpl implements DatabaseService {
         licenta.setId(0);
         licenta.setTitlu(nameOfLicence);
         licenta.setIdProfesor(idProfesor);
-        licenta.setTipLucrare(descriptionOfLicence);
         licenta.setIdStudent(student.getId());
+        licenta.setMaterialeLicenta(null);
+        licenta.setIdSesiune(0);
+        licenta.setTipLucrare(descriptionOfLicence);
         intrareDetaliiLicente.setId(0);
 
-        if (accessAdmin.insertLicenta(licenta) == 0 && accessAdmin.insertDetaliiLicenta(intrareDetaliiLicente) == 0)
+        if (accessAdmin.insertLicenta(licenta) == 0 && accessAdmin.insertDetaliiLicenta(intrareDetaliiLicente) == 0) {
             return true;
-        else
+        } else {
             return false;
+        }
 
     }
 

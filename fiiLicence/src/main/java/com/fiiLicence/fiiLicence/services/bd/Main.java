@@ -1,5 +1,7 @@
 package com.fiiLicence.fiiLicence.services.bd;
 
+import com.fiiLicence.fiiLicence.services.DatabaseServiceImpl;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +15,26 @@ public class Main {
 
         System.out.println("Conectat: " + bd.isConnected());
 
-        System.out.println("Inregistrare_stud: " + bd.inregistrare_stud("robert.otrocol@info.uaic.ro", "hashparola"));
-        System.out.println("Verificare: " + bd.verificare("80667163180736378150"));
-        System.out.println("Logare: " + bd.login("robert.otrocol", "hashparola"));
+        System.out.println("Inregistrare_stud: " + bd.inregistrare_stud("test.test@info.uaic.ro", "test"));
+        System.out.println("Verificare: " + bd.verificare("74422540752662302715"));
+        System.out.println("Logare: " + bd.login("test.test", "test"));
+
+
+        DatabaseServiceImpl databaseService = new DatabaseServiceImpl();
+        String ceva = "A";
+        byte[] b = ceva.getBytes();
+
+        System.out.println(databaseService.recordLicence("30ed807e4c78b937222ca5938ec65278","Licenta in microservicii",1,"LICENTA"));
+
+
+
+
+
+
 
         //System.out.println(bd.inregistrare_prof("lenuta.alboaie", "parola"));
         //System.out.println(bd.login("lenuta.alboaie","parola"));
 
-		
-		
 		/*if(bd.isConnected())
         {
 			AccessBD access = bd.login("Admin", "Root");

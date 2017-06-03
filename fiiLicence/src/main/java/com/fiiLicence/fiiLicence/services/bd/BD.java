@@ -24,15 +24,17 @@ public class BD {
         String apel = " { ? = call get_type( ? ) }";
         int rezultat;
         int idCont;
-
+        Statement stmt = null;
+        ResultSet rs = null;
+        CallableStatement statement = null;
         try {
 
-            Statement stmt = conexiune.createStatement();
-            ResultSet rs = stmt.executeQuery("Select ID from CONTURI where username = '" + username + "'");
+            stmt = conexiune.createStatement();
+            rs = stmt.executeQuery("Select ID from CONTURI where username = '" + username + "'");
             rs.next();
             idCont = rs.getInt(1);
 
-            CallableStatement statement = conexiune.prepareCall(apel);
+            statement = conexiune.prepareCall(apel);
             statement.registerOutParameter(1, Types.INTEGER);
             statement.setString(2, username);
             statement.execute();
@@ -83,6 +85,17 @@ public class BD {
 
         } catch (Exception e) {
             System.out.println("Exceptie la createAccess: " + e.getMessage());
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (stmt != null)
+                    statement.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
 
     }
@@ -118,17 +131,21 @@ public class BD {
 
     public IntrareConturi getContByToken(String token) {
         IntrareConturi cont = new IntrareConturi();
+        Statement stmt = null;
+        ResultSet rs = null;
+        Statement statement = null;
+        ResultSet result = null;
         try {
-            Statement stmt = conexiune.createStatement();
-            ResultSet rs = stmt.executeQuery("Select Count(*) from conturi where token='" + token + "'");
+            stmt = conexiune.createStatement();
+            rs = stmt.executeQuery("Select Count(*) from conturi where token='" + token + "'");
             rs.next();
             if (rs.getInt(1) == 0) {
                 System.out.println("Intrare Inexistenta");
                 return null;
             }
 
-            Statement statement = conexiune.createStatement();
-            ResultSet result = statement.executeQuery("Select * from conturi where token='" + token + "'");
+            statement = conexiune.createStatement();
+            result = statement.executeQuery("Select * from conturi where token='" + token + "'");
             result.next();
             cont.setId(result.getInt(1));
             cont.setUsername(result.getString(2));
@@ -143,26 +160,53 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la getContByToken: " + e.getMessage());
             return null;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (stmt != null)
+                    stmt.close();
+                if (rs != null)
+                    rs.close();
+                if (result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
 
     }
 
     public int setTokenByIdCont(String email, String token) {
+        Statement stmt = null;
+        ResultSet rs = null;
+        Statement statement = null;
         try {
-            Statement stmt = conexiune.createStatement();
-            ResultSet rs = stmt.executeQuery("Select Count(*) from conturi where email= '" + email + "'");
+            stmt = conexiune.createStatement();
+            rs = stmt.executeQuery("Select Count(*) from conturi where email= '" + email + "'");
             rs.next();
             if (rs.getInt(1) == 0) {
                 System.out.println("Intrare Inexistenta");
                 return -1;
             }
 
-            Statement statement = conexiune.createStatement();
+            statement = conexiune.createStatement();
             statement.executeUpdate("UPDATE CONTURI SET Token = '" + token + "' Where email='" + email + "'");
             return 0;
         } catch (Exception e) {
             System.out.println("Exceptie la setTokenByIdCont: " + e.getMessage());
             return 0;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (stmt != null)
+                    stmt.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
@@ -188,9 +232,10 @@ public class BD {
     public AccessBD login(String username, String hashparola) {
         String apel = "{ ? = call login( ?, ? ) }";
         int rezultat;
+        CallableStatement statement = null;
         try {
 
-            CallableStatement statement = conexiune.prepareCall(apel);
+            statement = conexiune.prepareCall(apel);
             statement.registerOutParameter(1, Types.INTEGER);
             statement.setString(2, username);
             statement.setString(3, hashparola);
@@ -206,6 +251,13 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la login: " + e.getMessage());
             return null;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
 
     }
@@ -213,9 +265,10 @@ public class BD {
     public int verificare(String hashcod) {
         String apel = "{ ? = call verificare( ? ) }";
         int rezultat;
+        CallableStatement statement = null;
         try {
 
-            CallableStatement statement = conexiune.prepareCall(apel);
+            statement = conexiune.prepareCall(apel);
             statement.registerOutParameter(1, Types.INTEGER);
             statement.setString(2, hashcod);
             statement.execute();
@@ -224,6 +277,13 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la login: " + e.getMessage());
             return -7;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
 
     }
@@ -251,9 +311,11 @@ public class BD {
             hashcod = "";
             for (int i = 0; i < 20; i++)
                 hashcod = hashcod + random.nextInt(9);
+            Statement statement = null;
+            ResultSet resultSet = null;
             try {
-                Statement statement = conexiune.createStatement();
-                ResultSet resultSet = statement.executeQuery(apel + hashcod + "'");
+                statement = conexiune.createStatement();
+                resultSet = statement.executeQuery(apel + hashcod + "'");
 
                 resultSet.next();
                 if (resultSet.getInt(1) != 0)
@@ -261,12 +323,23 @@ public class BD {
             } catch (Exception e) {
                 System.out.println("Exceptie la generare cod random la inregistrare_stud: " + e.getMessage());
                 return -7;
+            } finally {
+                try {
+                    if (statement != null)
+                        statement.close();
+                    if (resultSet != null)
+                        resultSet.close();
+                } catch (SQLException se) {
+                    System.out.println("Oups .. " + se);
+
+                }
             }
         } while (!unic);
 
         apel = "{ ? = call inregistrare_stud( ?, ?, ? ) }";
+        CallableStatement statement = null;
         try {
-            CallableStatement statement = conexiune.prepareCall(apel);
+            statement = conexiune.prepareCall(apel);
             statement.registerOutParameter(1, Types.INTEGER);
             statement.setString(2, email.split("@")[0]);
             statement.setString(3, hashparola);
@@ -274,12 +347,19 @@ public class BD {
             statement.execute();
             rezultat = statement.getInt(1);
 
-            MailSender mailSender = new MailSender(email, hashcod);
+            // MailSender mailSender = new MailSender(email, hashcod);
 
             return rezultat;
         } catch (Exception e) {
             System.out.println("Exceptie la inregistrare_stud: " + e.getMessage());
             return -7;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
@@ -323,10 +403,12 @@ public class BD {
     public List<StudentGuidedListResponse> getStudentsOfATeacher(int idTeacher) {
         List<StudentGuidedListResponse> studentOfATeacher = new ArrayList<>();
         String apel = "SELECT nota_1_oral, nota_2_oral, nota_3_oral, nota_4_oral_dizertatie,nota_5_oral_coordonator, nota_1_PROIECT, NOTA_2_PROIECT, NOTA_3_PROIECT, NOTA_4_PROIECT_DIZERTATIE, NOTA_5_PROIECT_COORDONATOR, STUDENTI.ID, STUDENTI.NUME, STUDENTI.PRENUME FROM licente JOIN DETALII_LICENTE ON LICENTE.ID = DETALII_LICENTE.ID join STUDENTI on LICENTE.ID_STUDENT = STUDENTI.ID WHERE LICENTE.ID_PROFESOR = ?";
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
-            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idTeacher);
-            ResultSet result = statement.executeQuery();
+            result = statement.executeQuery();
             while (result.next()) {
                 StudentGuidedListResponse student = new StudentGuidedListResponse();
                 DatabaseServiceImpl databaseService = new DatabaseServiceImpl();
@@ -351,6 +433,15 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
             return null;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
 
     }
@@ -379,8 +470,9 @@ public class BD {
     public boolean addStudent(int idTeacher, String numeStudent, String prenumeStudent) {
         String apel = " Update licente set ID_PROFESOR = ? where  ID_STUDENT = ? ";
         int idStudent = getIdStudentByName(numeStudent, prenumeStudent);
+        PreparedStatement statement = null;
         try {
-            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idTeacher);
             statement.setInt(2, idStudent);
             statement.executeUpdate();
@@ -388,6 +480,13 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
             return false;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
@@ -396,9 +495,10 @@ public class BD {
 
     public boolean removeStudent(int idTeacher, int idStudent) {
         String apel = " Update licente set ID_PROFESOR = null where ID_Profesor = ? and id_student = ? ";
+        PreparedStatement statement = null;
         try {
 
-            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idTeacher);
             statement.setInt(2, idStudent);
             statement.executeUpdate();
@@ -406,15 +506,22 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
             return false;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
     //18. functie: se poate edita data de examinare a unei comisii
     public boolean editExaminationDate(int idComisie, String beginDate, String endDate) {
         String apel = "update  evaluari e set e.INCEPUT_EVALUARE=to_date(?,'dd-mm-yyyy'),e.sfarsit_evaluare=to_date(?,'dd-mm-yyyy')where e.id_comisie=?";
+        PreparedStatement statement = null;
         try {
-
-            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement = conexiune.prepareStatement(apel);
             statement.setString(1, beginDate);
             statement.setString(2, endDate);
             statement.setInt(3, idComisie);
@@ -424,16 +531,25 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
             return false;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
     public StudentGrade getAllGrade(int idStudent) {
         StudentGrade student = new StudentGrade();
         String apel = "SELECT id_profesor, id_comisie, nota_1_oral, nota_2_oral, nota_3_oral, nota_4_oral_dizertatie, nota_5_oral_coordonator, nota_1_PROIECT, NOTA_2_PROIECT, NOTA_3_PROIECT, NOTA_4_PROIECT_DIZERTATIE, NOTA_5_PROIECT_COORDONATOR,tip FROM licente JOIN DETALII_LICENTE ON LICENTE.ID = DETALII_LICENTE.ID where LICENTE.ID_STUDENT = ?";
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
-            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idStudent);
-            ResultSet result = statement.executeQuery();
+            result = statement.executeQuery();
             while (result.next()) {
                 student.setIdProfesor(result.getInt(1));
                 student.setIdComisie(result.getInt(2));
@@ -453,16 +569,27 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea notelor: " + e.getMessage());
             return null;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
     public ProfsFromCommitte getProfFromCommitte(int idComisie) {
         ProfsFromCommitte profesori = new ProfsFromCommitte();
         String apel = "select ID_PROF1,ID_PROF2,ID_PROF3,ID_PROF4_DIZERTATIE from comisii where id = ?";
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
-            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idComisie);
-            ResultSet result = statement.executeQuery();
+            result = statement.executeQuery();
             while (result.next()) {
                 profesori.setProfesor1(result.getInt(1));
                 profesori.setProfesor2(result.getInt(2));
@@ -473,6 +600,15 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea Profesorilor Din Comisie: " + e.getMessage());
             return null;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
@@ -500,10 +636,12 @@ public class BD {
 
     public IntrareStudenti selectStudentByIdCont(int idCont) {
         String apel = " Select * from studenti where id_cont = ? ";
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
-            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idCont);
-            ResultSet result = statement.executeQuery();
+            result = statement.executeQuery();
             IntrareStudenti intrare = new IntrareStudenti();
 
 
@@ -521,6 +659,15 @@ public class BD {
         } catch (Exception e) {
             System.out.println("Exceptie la selectStudenti:" + e.getMessage());
             return null;
+        } finally {
+            try {
+                if (statement != null)
+                    statement.close();
+                if (result != null)
+                    result.close();
+            } catch (SQLException se) {
+                System.out.println("Oups .. " + se);
+            }
         }
     }
 
