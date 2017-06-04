@@ -212,7 +212,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         licenta.setId(0);
         licenta.setTitlu(nameOfLicence);
         licenta.setIdProfesor(idProfesor);
-        licenta.setIdStudent(student.getId());
+        licenta.setIdStudent(idCont);
         licenta.setMaterialeLicenta(null);
         licenta.setIdSesiune(0);
         licenta.setTipLucrare(descriptionOfLicence);
@@ -416,7 +416,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         for (IntrareStudenti s : listaStudenti) {
             StudentResponse studResp = new StudentResponse();
-            studResp.setIdStudent(s.getId());
+            studResp.setIdStudent(s.getIdCont());
             studResp.setNumeStudent(s.getNume());
             studResp.setPrenumeStudent(s.getPrenume());
             listaResposeStudenti.add(studResp);
