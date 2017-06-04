@@ -1,0 +1,59 @@
+
+.evaluation_card{
+    margin: 50px;
+    padding: 0;
+}
+
+.content{
+    padding: 20px;
+}
+
+.info_text{
+    margin-left: 20px;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.evaluation_container{
+    border: 1px solid lightgray;
+    margin-top: 25px;
+}
+
+.evaluation_entry{
+    border: 1px solid lightgray;
+    margin: 5px;
+    display: flex;
+}
+
+.name{
+    margin: 20px;
+    font-weight: bold;
+}
+
+.date_label{
+    position: absolute;
+    margin: 20px;
+    margin-left: 250px;
+}
+
+.entry_input_oral{
+    position: absolute;
+    margin: 8px;
+    margin-left: 400px;
+    width: 20%;
+}
+
+.entry_input_project{
+    position: absolute;
+    margin: 8px;
+    margin-left: calc(400px + 25%);
+    width: 20%;
+}
+
+.save_btn{
+    position: absolute;
+    margin: 8px;
+    width: 14%;
+    margin-left: calc(400px + 48%);
+}
